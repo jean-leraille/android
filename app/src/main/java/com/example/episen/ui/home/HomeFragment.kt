@@ -1,17 +1,23 @@
 package com.example.episen.ui.home
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.episen.ViewModelFactory
+import com.example.episen.data.models.Commune
 import com.example.episen.databinding.FragmentHomeBinding
+import com.example.episen.ui.adapter.SearchResultAdapter
 import org.koin.android.ext.android.inject
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SearchResultAdapter.ItemResultListener {
 
     private val viewModelFactory: ViewModelFactory by inject()
     private var _binding: FragmentHomeBinding? = null
@@ -42,7 +48,19 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.getCommunes("versaill", "nom, code")
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int,
+                before: Int, count: Int) {
+                homeViewModel.getCommunes(s.toString(), "nom, code")
+            }
+        })
+        binding.searchResult.adapter = SearchResultAdapter(this)
+        binding.searchResult.layoutManager = LinearLayoutManager(context)
+
     }
 
     private fun handleState(state: HomeViewModel.States) {
@@ -51,6 +69,12 @@ class HomeFragment : Fragment() {
                 //progress.visibility= View.GONE
             }
             is HomeViewModel.States.OnGetCommunes -> {
+                val communes = state.response
+                if(!communes.isNullOrEmpty()) {
+                    val resultAdapter = binding.searchResult.adapter as SearchResultAdapter
+                    resultAdapter.itemList = communes
+                    resultAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
@@ -58,5 +82,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemSelected(item: Commune) {
+        Toast.makeText(requireContext(), item.nom, Toast.LENGTH_SHORT).show()
     }
 }

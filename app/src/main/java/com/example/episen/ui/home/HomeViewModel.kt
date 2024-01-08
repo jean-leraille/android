@@ -27,13 +27,13 @@ class HomeViewModel(
                 ) {
 
                     Log.d("dev0", "On Response")
-                    stateLiveData.value = States.OnGetCommunes(name)
+                    stateLiveData.value = States.OnGetCommunes(response.body())
                 }
             })
     }
 
     sealed class States {
         object NoConnection : States()
-        data class OnGetCommunes(var response: String?) : States()
+        data class OnGetCommunes(var response: List<Commune>?) : States()
     }
 }
