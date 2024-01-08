@@ -3,11 +3,13 @@ package com.example.episen.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.episen.BaseViewModel
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel :  BaseViewModel<HomeViewModel.States>() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+
+    sealed class States {
+        object NoConnection : States()
+        data class OnConnection(var response: String?) : States()
     }
-    val text: LiveData<String> = _text
 }
