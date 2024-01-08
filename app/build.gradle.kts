@@ -48,4 +48,17 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    //Retrofit (http client)
+    implementation("com.squareup.retrofit2:converter-gson:2.7.0")
+    implementation("com.squareup.retrofit2:retrofit:2.7.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    // Http logger
+    implementation("com.squareup.okhttp3:okhttp:4.2.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.0.0")
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:3.0.0-RC1")
+
+
+    //Koin (Dependency Injections)
+    implementation("io.insert-koin:koin-android:3.2.0-beta-1")
 }
